@@ -16,29 +16,30 @@ export default {
   selection: true,
   dialogClickModal: true,
   column: [
+    // {
+    //   label: '功能菜单',
+    //   prop: 'basicTableName',
+    //   children: [{
+    //     label: '功能菜单',
+    //     prop: 'basicTableName',
+    //     type: 'select',
+    //     dicData: [],
+    //     dict: {label: 'name', value: 'basicTableName', errorMessage: '获取基础表名失败'},
+    //     rules: [{required: true, message: '功能菜单为空', trigger: 'change'}],
+    //   }]
+    // }, {
+    //   label: '业务名称',
+    //   prop: 'businessCode',
+    //   children: [{
+    //     label: '业务名称',
+    //     prop: 'businessCode',
+    //     type: 'select',
+    //     dicData: [],
+    //     dict: {label: 'dictValue', value: 'dictKey', errorMessage: '获取业务名称失败'},
+    //     rules: [{required: true, message: '业务名称为空', trigger: 'change'}],
+    //   }]
+    // },
     {
-      label: '功能菜单',
-      prop: 'basicTableName',
-      children: [{
-        label: '功能菜单',
-        prop: 'basicTableName',
-        type: 'select',
-        dicData: [],
-        dict: {label: 'name', value: 'basicTableName', errorMessage: '获取基础表名失败'},
-        rules: [{required: true, message: '功能菜单为空', trigger: 'change'}],
-      }]
-    }, {
-      label: '业务名称',
-      prop: 'businessCode',
-      children: [{
-        label: '业务名称',
-        prop: 'businessCode',
-        type: 'select',
-        dicData: [],
-        dict: {label: 'dictValue', value: 'dictKey', errorMessage: '获取业务名称失败'},
-        rules: [{required: true, message: '业务名称为空', trigger: 'change'}],
-      }]
-    }, {
       label: '模型名称',
       prop: 'extModelName',
       children: [{
@@ -47,7 +48,8 @@ export default {
         type: 'input',
         rules: [{required: true, message: '模型名称为空', trigger: 'blur'}]
       }]
-    }, {
+    },
+    {
       label: '是否启用',
       prop: 'status',
       children: [{
@@ -59,7 +61,8 @@ export default {
         dataType: 'number',
         value: 1
       }]
-    }, {
+    },
+    {
       label: '创建人',
       prop: 'createUserName',
       children: [{

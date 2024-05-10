@@ -3,11 +3,12 @@
     <template slot='title'>
       <div>
         <span style='margin-right: 5px'>test</span>
-        <el-button :size='size' @click='addColumn'>add field test</el-button>
-        <el-button :size='size' @click='editColumn' :disabled='selection.length !== 1'>edit field test</el-button>
-        <el-button :size='size' @click='delColumn'  :disabled='!selection.length'>del field test</el-button>
-        <el-button :size='size' @click='showFormEffect'>show form effect</el-button>
+        <el-button :size='size' @click='addColumn'       :disabled='loading'>add field test</el-button>
+        <el-button :size='size' @click='editColumn'      :disabled='selection.length !== 1'>edit field test</el-button>
+        <el-button :size='size' @click='delColumn'       :disabled='!selection.length'>del field test</el-button>
+        <el-button :size='size' @click='showFormEffect'  :disabled='loading'>show form effect</el-button>
         <el-button :size='size' @click="oldValue=null;init()" icon='el-icon-refresh' style='float: right;margin-right: 40px' circle plain />
+        <el-button :size='size' @click='multipleChoices' :disabled='loading'>multiple choices test</el-button>
       </div>
     </template>
     <!--form-table-->
@@ -17,7 +18,7 @@
         <template v-for='item in optionTable.column'>
           <el-table-column :label='item.label' :prop='item.prop' :width='item.width' align='center'>
             <template v-slot='{row,$index}'>
-              <el-form-item style='margin-bottom: 0' :prop='`data.${$index}.${item.prop}`' :rules='item.rules'>
+                <el-form-item style='margin-bottom: 0' :prop='`data.${$index}.${item.prop}`' :rules='item.rules'>
                 <el-tooltip :disabled='!map.has(`data.${$index}.${item.prop}`)' :content='map.get(`data.${$index}.${item.prop}`)' placement='bottom'>
                   <el-input        v-if="     item.type === 'input'"  v-model.trim.number='row[item.prop]' :size='size' :placeholder="item.placeholder ? item.placeholder : ''" :disabled="item.prop === 'prop' && !Boolean(form.data[$index].isExtPro)" clearable/>
                   <el-input-number v-else-if="item.type === 'number'" v-model='row[item.prop]' :size='size' :placeholder="item.placeholder ? item.placeholder : ''" :min='item.min' :max='item.max' :precision='item.precision' controls-position='right' @blur='item.blur($event, form.data[$index])' />
@@ -70,13 +71,13 @@
   </el-dialog>
 </template>
 
+
 <script>
 import optionForm from './optionForm'
 import optionTable from './optionTable'
 import optionShowFormEffect from './optionShowFormEffect'
 import {getColumnJson, submit} from './api'
-import {columnOne} from '@/api/crudEdit'
-import {getDicData, isEmpty, isObjectEqual} from '@/util/crud'
+import {getDicData, isEmpty, isNotEmpty, isObjectEqual} from '../.././util'
 
 export default {
   name: 'bsExtModelChildren',
@@ -130,6 +131,7 @@ export default {
       size: 'small',//使用mini编辑样式会出问题
       oldValue: null,
       loading: true,
+      choices: false,
       dialogFormVisible: false,
       preventDuplication: false,
       dialogForm: {},
@@ -160,6 +162,10 @@ export default {
     }
   },
   methods: {
+    multipleChoices() {
+      this.choices = !this.choices
+      this.$message({type: 'success', message: this.choices ? '行选启用' : '行选关闭'})
+    },
     showFormEffect() {
       optionShowFormEffect.column = this.form.data.map(cloneItem => {
         cloneItem.columnJson = {label: cloneItem.label, prop: cloneItem.prop, children: [{}]}
@@ -178,7 +184,11 @@ export default {
           cloneItem.columnJson.children[0].activeColor = activeColor
           cloneItem.columnJson.children[0].inactiveColor = inactiveColor
         }
-        cloneItem.columnJson.children[0].order = cloneItem.columnJson.children[0].order > 0 ? -Math.abs(cloneItem.columnJson.children[0].order) : cloneItem.columnJson.children[0].order < 0 ? Math.abs(cloneItem.columnJson.children[0].order) : cloneItem.columnJson.children[0].order
+
+        if (isNotEmpty(cloneItem.columnJson.children[0].rules)) cloneItem.columnJson.children[0].rules = eval(cloneItem.columnJson.children[0].rules)
+        if (isNotEmpty(cloneItem.columnJson.children[0].order)) cloneItem.columnJson.children[0].order = cloneItem.columnJson.children[0].order > 0 ? -Math.abs(cloneItem.columnJson.children[0].order) : cloneItem.columnJson.children[0].order < 0 ? Math.abs(cloneItem.columnJson.children[0].order) : cloneItem.columnJson.children[0].order
+
+        console.log(cloneItem.columnJson)
         return cloneItem.columnJson
       })
       this.arr = []
@@ -199,7 +209,7 @@ export default {
       this.preventDuplication = flag
     },
     addColumn() {
-      this.form.data.unshift({
+      this.form.data.push({
         span: 12,
         isExtPro: 1,
         isPrint: true,
@@ -321,8 +331,10 @@ export default {
       row.index = rowIndex
     },
     rowClick(row, event, column) {
-      if (column.label === '操作' || column.columnKey === 'status') return
-      this.$refs.table.toggleRowSelection(row)
+      if (this.choices) {
+        if (column.label === '操作' || column.columnKey === 'status') return
+        this.$refs.table.toggleRowSelection(row)
+      }
     },
     selectionChange(selection) {
       this.selection = selection
@@ -337,6 +349,8 @@ export default {
         const {data: {data, code}} = await getColumnJson(this.oldValue)
         if (code === 200) {
           this.form.data = data.map(item => {
+            console.log(item)
+            console.log(JSON.parse(item.columnJson))
             const columnJson = JSON.parse(item.columnJson).children[0]
             columnJson.id = item.id
             columnJson.proId = item.proId
@@ -350,9 +364,10 @@ export default {
             })
             return columnJson
           })
-          this.clone = structuredClone(this.form.data) //深拷贝
+          this.clone = structuredClone(this.form.data)
         }
       } else {
+        return this.loading = false
         if (this.oldValue === this.parentData.basicTableName) return this.loading = false
         this.oldValue = this.parentData.basicTableName
         const {data: {data, code}} = await columnOne({urlInfo: this.oldValue, versions: '1.0.0'})
