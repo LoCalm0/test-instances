@@ -2,7 +2,7 @@
   <div>
     <!--  prefix 查询前缀 没写默认没有  -->
     <!--  suffix 查询后缀 没写默认没有 -->
-    <!--  column.prop.replace(/UserName$/g, 'User')     以UserName结尾会改为User   createUserName会改为createUser  or updateUserName会改为updateUser    xxx_xxxUserName会改为xxx_xxxUser-->
+    <!--  column.prop.replace(/UserName$/g, 'User')     以UserName结尾会改为User   createUserName会改为createUser  or updateUserName会改为updateUser    xxxxName会改为xxxx-->
     <el-input v-if="['input', 'textarea'].includes(column.type)" v-model="query[`${column.prefix ? column.prefix : ''}` + column.prop.replace(/UserName$/g, 'User') + `${column.suffix ? column.suffix : ''}`]" placeholder='请输入' :size='size' @keyup.enter.native="$emit('onLoad')" clearable/>
     <el-input-number v-if="column.type === 'number'" v-model="query[`${column.prefix ? column.prefix : ''}` + column.prop+`${column.suffix ? column.suffix : '_equal'}`]" placeholder='请输入' :size='size' controls-position='right' @keyup.enter.native="$emit('onLoad')"/>
     <el-select v-if="['select', 'switch', 'radio'].includes(column.type)" v-model="query[`${column.prefix ? column.prefix : ''}` + column.prop+`${column.suffix ? column.suffix : '_equal'}`]" placeholder='请选择' :size='size' @change="$emit('onLoad')" filterable clearable>

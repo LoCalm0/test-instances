@@ -13,9 +13,9 @@ export default {
   column: [
     {
       label: "字段类型",
-      prop: "propertyType",
+      prop: "fieldType",
       type: "select",
-      columnJson: false,
+      fieldJson: false,
       width: 160,
       rules: [{required: true, message: '字段类型为空', trigger: 'change'}],
       dicData: [
@@ -39,11 +39,11 @@ export default {
       width: 160,
     },
     {
-      label: "字段显示名",
+      label: "字段备注",
       prop: "label",
       type: "input",
       width: 160,
-      rules: [{required: true, message: '字段显示名为空', trigger: 'blur'}],
+      rules: [{required: true, message: '字段备注名为空', trigger: 'blur'}],
     },
     {
       label: "表单类型",
@@ -60,6 +60,21 @@ export default {
         {label: '日期框', value: 'datetime'},
         {label: '开关框', value: 'switch'}
       ],
+      change: (event, value, flag) => {
+        if (flag) {
+          if (value.type === 'textarea') {
+            value.minRows = 3
+            value.maxRows = 5
+            value.overHidden = true
+            value.span = 24
+          } else {
+            value.minRows = null
+            value.maxRows = null
+            value.overHidden = null
+            value.span = 12
+          }
+        }
+      }
     },
     {
       label: "表单默认值",
@@ -82,6 +97,14 @@ export default {
       min: -99,
       max: 99,
       precision: 0,
+    },
+    {
+      label: "需要子级",
+      prop: "isChildren",
+      type: 'switch',
+      width: 110,
+      dicData: [],
+      dataType: 'number',
     },
     {
       label: "新增是否显示",
@@ -123,39 +146,6 @@ export default {
       dicData: [],
       dataType: 'boolean',
     },
-    {
-      label: "是否必填",
-      prop: "isRequired",
-      type: 'switch',
-      width: 110,
-      dicData: [],
-      dataType: 'number',
-    },
-    {
-      label: "是否导出",
-      prop: "isExport",
-      type: 'switch',
-      columnJson: false,
-      width: 110,
-      dicData: [],
-      dataType: 'number',
-    },
-    {
-      label: "是否打印",
-      prop: "isPrint",
-      type: 'switch',
-      columnJson: false,
-      width: 110,
-      dicData: [],
-      dataType: 'number',
-    },
-
-
-
-
-
-
-
 
 
 

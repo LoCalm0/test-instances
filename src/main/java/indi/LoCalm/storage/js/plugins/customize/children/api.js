@@ -1,6 +1,6 @@
 import request from '@/router/axios'
 
-const API = '/api/im-tristone-develop/bsExtModelPro'
+const API = '/api/im-tristone-develop/modelTableFields'
 
-export const getColumnJson = id => request.get(`${API}/getColumnJson?id=${id}`)
-export const submit = (data,proIds,ids) => request.post(`${API}/submit?proIds=${proIds}&ids=${ids}`, data)
+export const getDetail = parentId => request.get(`${API}/detail?parentId=${parentId}`)
+export const submit = (data,ids) => request.post(`${API}/submit?ids=${ids}`, data)
