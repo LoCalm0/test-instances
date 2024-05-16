@@ -1,4 +1,6 @@
-//package indi.LoCalm.storage.format.annotition;
+//package com.imtristone.format.annotition;
+//
+//import org.springframework.core.annotation.AliasFor;
 //
 //import java.lang.annotation.ElementType;
 //import java.lang.annotation.Retention;
@@ -13,4 +15,13 @@
 //@Target(ElementType.FIELD)
 //@Retention(RetentionPolicy.RUNTIME)
 //public @interface UserFormat {
+//
+//    @AliasFor("fieldName")
+//    String value() default "";
+//
+//    @AliasFor("value")
+//    String fieldName() default "";
+//
+//    String separator();
+//
 //}
