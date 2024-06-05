@@ -1,0 +1,1 @@
+CamelCase、Chinese、CodeGlance Pro、EasyCode、element、JavaDoc、JRebel and XRebel 20224.1、JRebel mybatisPlus extension、Maven Helper、MyBatisX、Show Comment、SonarLint、Translation、Vue.js
