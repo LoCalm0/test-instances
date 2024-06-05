@@ -12,34 +12,40 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
-
+<!--    system	 编译期、测试期    由于版权限制等原因，不是所有的jar包都存储在中央仓库中。scope取值为system时，表示依赖来自本地系统，需要配合标签systemPath（用于指定依赖路径）使用-->
+<!--    runtime	 测试期、运行期	测试和运行时需要-->
+<!--    provided 编译期、测试期	provided表示已提供，即打包期间不需要该依赖，该依赖会由其他依赖或容器会提供，避免依赖冲突-->
+<!--    test	 测试期	        用于测试代码的编译和执行，如：junit-->
+<!--    compile	 编译期、测试期、运行期	默认-->
+<!--    【1】maven项目依赖生效分为三个时期，编译期、测试期、运行期，其中scope默认取值为compile -->
+<!--    【2】runtime 常用complie 代替，而compile是默认可以不用配置，也就是所一般只配test和provided -->
+<!--    版本尾号尽量使用偶数 一般偶数为稳定版 -->
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.12.5</version>
+            <version>2.17.0</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.8.27</version>
+            <version>5.8.28</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>4.1.2</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
+            <version>33.2.0-jre</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
-            <scope>compile</scope>
+            <version>1.18.32</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
