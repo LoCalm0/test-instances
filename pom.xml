@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>indi.LoCalm</groupId>
-    <artifactId>testInstances</artifactId>
+    <artifactId>test-instances</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
