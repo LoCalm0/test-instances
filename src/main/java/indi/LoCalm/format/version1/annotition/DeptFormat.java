@@ -1,4 +1,4 @@
-//package com.imtristone.format.annotition;
+//package indi.LoCalm.format.version1.annotition;
 //
 //import org.springframework.core.annotation.AliasFor;
 //
@@ -16,12 +16,12 @@
 //@Retention(RetentionPolicy.RUNTIME)
 //public @interface DeptFormat {
 //
-//    @AliasFor("fieldName")
-//    String value() default "";
+//	@AliasFor("fieldName")
+//	String value() default "";
 //
-//    @AliasFor("value")
-//    String fieldName() default "";
+//	@AliasFor("value")
+//	String fieldName() default "";
 //
-//    String separator();
+//	String separator() default "";
 //
 //}

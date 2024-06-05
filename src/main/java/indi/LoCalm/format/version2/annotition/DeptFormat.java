@@ -1,6 +1,5 @@
-//package indi.LoCalm.storage.format.annotition;
+//package indi.LoCalm.format.version2.annotition;
 //
-//import cn.hutool.core.date.DatePattern;
 //import org.springframework.core.annotation.AliasFor;
 //
 //import java.lang.annotation.ElementType;
@@ -9,18 +8,18 @@
 //import java.lang.annotation.Target;
 //
 ///**
-// * 时间格式
+// * 部门格式化
 // *
 // * @author LoCalm
 // */
 //@Target(ElementType.FIELD)
 //@Retention(RetentionPolicy.RUNTIME)
-//public @interface DateFormat {
+//public @interface DeptFormat {
 //
-//	@AliasFor("pattern")
-//	String value() default DatePattern.NORM_DATETIME_PATTERN;
+//	@AliasFor("fieldName")
+//	String value() default "";
 //
 //	@AliasFor("value")
-//	String pattern() default DatePattern.NORM_DATETIME_PATTERN;
+//	String fieldName() default "";
 //
 //}

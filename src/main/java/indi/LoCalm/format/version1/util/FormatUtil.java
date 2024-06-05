@@ -1,4 +1,4 @@
-//package indi.LoCalm.storage.format.util;
+//package indi.LoCalm.format.version1.util;
 //
 //import cn.hutool.core.bean.BeanUtil;
 //import cn.hutool.core.collection.CollUtil;
@@ -51,17 +51,17 @@
 //	}
 //
 //	private static final Map<String, String> USER_SET_GET_FIELD = new HashMap<>();
-//	private static final Map<String, String> USER_FIELD_SEPARATOR = new HashMap<>();
 //	private static final Map<String, String> DEPT_SET_GET_FIELD = new HashMap<>();
+//	private static final Map<String, String> USER_FIELD_SEPARATOR = new HashMap<>();
 //	private static final Map<String, String> DEPT_FIELD_SEPARATOR = new HashMap<>();
+//	private static final StringBuilder STR_BUILDER = new StringBuilder();
+//	private static final String ID = LambdaUtil.getFieldName(BaseEntity::getId);
 //	private static final List<Class<? extends Annotation>> ANNOTATION_TYPES = Arrays.asList(UserFormat.class, DeptFormat.class);
 //
 //	private static void init(Class<?> clazz) {
 //		Arrays.stream(ClassUtil.getDeclaredFields(clazz)).forEach(field -> Arrays.stream(field.getDeclaredAnnotations()).filter(annotation -> ANNOTATION_TYPES.contains(annotation.annotationType())).forEach(annotation -> {
 //			Annotation userOrDeptAnnotation = AnnotationUtils.getAnnotation(field, annotation.annotationType());
 //			String fieldName = field.getName();
-//
-//
 //			String value = ReflectUtil.invoke(userOrDeptAnnotation, LambdaUtil.getMethodName(UserFormat::value));
 //			String separator = ReflectUtil.invoke(userOrDeptAnnotation, LambdaUtil.getMethodName(UserFormat::separator));
 //			if (CharSequenceUtil.isBlank(value)) value = fieldName;
@@ -71,24 +71,22 @@
 //
 //			Map<String, String> targetField = (userOrDeptAnnotation instanceof UserFormat) ? USER_SET_GET_FIELD : DEPT_SET_GET_FIELD;
 //			targetField.put(fieldName, value);
-//
 //			if (CharSequenceUtil.isNotEmpty(separator)) {
 //				Map<String, String> targetSeparator = (userOrDeptAnnotation instanceof UserFormat) ? USER_FIELD_SEPARATOR : DEPT_FIELD_SEPARATOR;
 //				targetSeparator.put(fieldName, separator);
 //			}
-//
 //		}));
 //	}
 //
 //	private static void clear() {
 //		USER_SET_GET_FIELD.clear();
-//		USER_FIELD_SEPARATOR.clear();
 //		DEPT_SET_GET_FIELD.clear();
+//		USER_FIELD_SEPARATOR.clear();
 //		DEPT_FIELD_SEPARATOR.clear();
 //	}
 //
 //	/**
-//	 * @see FormatUtil#format(V)
+//	 * @see com.imtristone.format.utils.FormatUtil#format(V)
 //	 * @deprecated
 //	 */
 //	@Deprecated
@@ -113,7 +111,8 @@
 //	}
 //
 //	/**
-//	 * @see FormatUtil#format(V)
+//	 * @see com.imtristone.format.utils.FormatUtil#format(V)
+//	 * @deprecated
 //	 */
 //	@Deprecated
 //	private static <V> void setEntityFieldValue(String getValueName, V vo, Field setValueName, @NotNull LongFunction<?> cacheRetriever, String getMethodName) {
@@ -155,12 +154,9 @@
 //			return vo;
 //		}
 //
-//
 //		CollUtil.Consumer<V> execute = createProcessor(vo, run);
 //		if (execute != null) {
-//			for (int i = 0; i < vo.size(); i++) {
-//				execute.accept(vo.get(i), i);
-//			}
+//			CollUtil.forEach(vo, execute);
 //		}
 //		clear();
 //		return vo;
@@ -171,40 +167,51 @@
 //			Object fieldValue = ReflectUtil.getFieldValue(vo, entry.getValue());
 //			if (fieldValue == null) continue;
 //			String separator = fieldSeparator.get(entry.getKey());
-//			if (getEntityName(fieldValue, separator, vo, entry.getValue(), entityListRetriever, nameExtractor)) {
+//			if (CharSequenceUtil.isEmpty(separator)) {
 //				ReflectUtil.setFieldValue(vo, entry.getKey(), getEntity.apply(Convert.toLong(fieldValue)));
+//			} else {
+//				getEntityName(fieldValue, separator, vo, entry.getValue(), entityListRetriever, nameExtractor);
 //			}
 //		}
 //	}
 //
-//	public static List<Long> getSeparatorData(@NotNull String fieldValueStr, String separator) {
-//		if (!(fieldValueStr.contains(separator) && ReUtil.isMatch(CharSequenceUtil.format("[0-9{}]+", separator), fieldValueStr))) {
-//			return Collections.emptyList();
+//	private static List<Long> getSeparatorData(@NotNull String fieldValueStr, String separator) {
+//		if (ReUtil.isMatch(CharSequenceUtil.format("[0-9{}]+", separator), fieldValueStr)) {
+//			final SplitIter splitIter = new SplitIter(fieldValueStr, new StrFinder(separator, false), -1, true);
+//			return CollUtil.removeNull(splitIter.toList(Convert::toLong));
 //		}
-//		final SplitIter splitIter = new SplitIter(fieldValueStr, new StrFinder(separator, false), -1, true);
-//		List<Long> userIds = splitIter.toList(Convert::toLong);
-//		return CollUtil.isNotEmpty(userIds) ? userIds : Collections.emptyList();
+//		return Collections.emptyList();
 //	}
 //
 //
-//	private static <V, T> boolean getEntityName(Object fieldValue, String separator, V vo, String fieldName, Function<List<Long>, List<T>> entityListRetriever, Function<T, String> nameExtractor) {
-//		if (CharSequenceUtil.isEmpty(separator)) return true;
-//
+//	private static <V, T> void getEntityName(Object fieldValue, String separator, V vo, String fieldName, Function<List<Long>, List<T>> entityListRetriever, Function<T, String> nameExtractor) {
 //		List<Long> userIds = getSeparatorData(Convert.toStr(fieldValue), separator);
-//		if (CollUtil.isEmpty(userIds)) return false;
+//		if (CollUtil.isEmpty(userIds)) return;
 //
 //		List<T> apply = entityListRetriever.apply(userIds);
-//		if (CollUtil.isEmpty(apply)) return false;
+//		if (CollUtil.isEmpty(apply)) return;
 //		ReflectUtil.setFieldValue(vo, fieldName, apply.stream().map(nameExtractor).collect(Collectors.joining(separator)));
-//		return false;
 //	}
 //
-//	private static <T> List<Long> getSeparatorIds(@NotNull List<T> vo, Map<String, String> setGetField, Map<String, String> fieldSeparator) {
-//		StringBuilder strBuilder = new StringBuilder();
+//	@NotNull
+//	private static <V> String indexIdAndField(V value, int index, String setField) {
+//		try {
+//			return STR_BUILDER.append(Convert.toStr(ReflectUtil.getFieldValue(value, ID)))
+//				.append(CharPool.BRACKET_START)
+//				.append(index)
+//				.append(CharPool.BRACKET_END)
+//				.append(setField)
+//				.toString();
+//		} finally {
+//			STR_BUILDER.setLength(0);
+//		}
+//	}
+//
+//	private static <T> List<Long> getSeparatorAllIds(@NotNull List<T> vo, Map<String, String> setGetField, Map<String, String> fieldSeparator) {
 //		List<Long> ids = new ArrayList<>();
 //		for (int i = 0; i < vo.size(); i++) {
 //			for (Map.Entry<String, String> entry : setGetField.entrySet()) {
-//				Object fieldValue = ReflectUtil.getFieldValue(vo, entry.getValue());
+//				Object fieldValue = ReflectUtil.getFieldValue(vo.get(i), entry.getValue());
 //				if (fieldValue == null) continue;
 //				String separator = fieldSeparator.get(entry.getKey());
 //
@@ -213,63 +220,59 @@
 //				} else {
 //					String fieldValueStr = Convert.toStr(fieldValue);
 //					ids.addAll(getSeparatorData(fieldValueStr, separator));
-//					String indexIdAndField = strBuilder.append(Convert.toStr(ReflectUtil.getFieldValue(vo.get(i), LambdaUtil.getFieldName(BaseEntity::getId))))
-//						.append(CharPool.BRACKET_START)
-//						.append(i)
-//						.append(CharPool.BRACKET_END)
-//						.append(entry.getKey())
-//						.toString();
-//					fieldSeparator.put(indexIdAndField, fieldValueStr);
-//					strBuilder.setLength(0);
+//					fieldSeparator.put(indexIdAndField(vo.get(i), i, entry.getKey()), fieldValueStr);
 //				}
 //			}
 //		}
-//		ids = ids.stream().distinct().collect(Collectors.toList());
-//		return CollUtil.isNotEmpty(ids) ? ids : Collections.emptyList();
+//		return ids.stream().distinct().collect(Collectors.toList());
 //	}
 //
 //	@Nullable
-//	private static <V, T> CollUtil.Consumer<V> getProcessor(List<V> vo, Map<String, String> setGetField, Map<String, String> fieldSeparator, Function<List<Long>, List<T>> entityListRetriever, Function<T, String> nameExtractor) {
-//		List<Long> separatorIds = getSeparatorIds(vo, setGetField, fieldSeparator);
+//	private static <V, T> CollUtil.Consumer<V> getProcessor(boolean separatorEmpty, List<V> vo, Map<String, String> setGetField, Map<String, String> fieldSeparator, Function<List<Long>, List<T>> entityListRetriever, Function<T, String> nameExtractor) {
+//		if (separatorEmpty) return null;
+//
+//		List<Long> separatorIds = getSeparatorAllIds(vo, setGetField, fieldSeparator);
 //		if (CollUtil.isEmpty(separatorIds)) return null;
 //		List<T> apply = entityListRetriever.apply(separatorIds);
 //
 //		if (CollUtil.isEmpty(apply)) return null;
-//		StringBuilder strBuilder = new StringBuilder();
 //		return ((value, index) -> {
-//			String fieldId = LambdaUtil.getFieldName(BaseEntity::getId);
-//			for (Map.Entry<String, String> entry : USER_SET_GET_FIELD.entrySet()) {
-//				String indexIdAndField = strBuilder.append(Convert.toStr(ReflectUtil.getFieldValue(vo.get(index), fieldId)))
-//					.append(CharPool.BRACKET_START)
-//					.append(index)
-//					.append(CharPool.BRACKET_END)
-//					.append(entry.getKey())
-//					.toString();
-//				String fieldValueStr = USER_FIELD_SEPARATOR.get(indexIdAndField);
-//
-//				String separator = USER_FIELD_SEPARATOR.get(entry.getKey());
-//				List<Long> separatorData = getSeparatorData(fieldValueStr, separator);
-//
-//				ReflectUtil.setFieldValue(vo.get(index), entry.getKey(), apply.stream().filter(item -> separatorData.contains(Convert.toLong(ReflectUtil.getFieldValue(item, fieldId)))).map(nameExtractor).collect(Collectors.joining(separator)));
+//			for (Map.Entry<String, String> entry : setGetField.entrySet()) {
+//				String fieldValueStr = fieldSeparator.get(indexIdAndField(value, index, entry.getKey()));
+//				String separator = fieldSeparator.get(entry.getKey());
+//				if (CharSequenceUtil.isEmpty(separator)) {
+//					Long id = Convert.toLong(ReflectUtil.getFieldValue(value, entry.getValue()));
+//					ReflectUtil.setFieldValue(value, entry.getKey(), apply.stream().filter(item -> Objects.equals(Convert.toLong(ReflectUtil.getFieldValue(item, ID)), id)).map(nameExtractor).collect(Collectors.joining()));
+//				} else {
+//					List<Long> separatorData = getSeparatorData(fieldValueStr, separator);
+//					if (CollUtil.isNotEmpty(separatorData)) {
+//						ReflectUtil.setFieldValue(value, entry.getKey(), apply.stream().filter(item -> separatorData.contains(Convert.toLong(ReflectUtil.getFieldValue(item, ID)))).map(nameExtractor).collect(Collectors.joining(separator)));
+//					}
+//				}
 //			}
 //		});
 //	}
 //
 //	private static <V> CollUtil.Consumer<V> createProcessor(List<V> vo, CollUtil.Consumer<V> run) {
-//		boolean userSeparatorNotEmpty = MapUtil.isNotEmpty(USER_FIELD_SEPARATOR);
-//		boolean deptSeparatorNotEmpty = MapUtil.isNotEmpty(DEPT_FIELD_SEPARATOR);
+//		boolean userSeparatorEmpty = MapUtil.isEmpty(USER_FIELD_SEPARATOR);
+//		boolean deptSeparatorEmpty = MapUtil.isEmpty(DEPT_FIELD_SEPARATOR);
+//
 //		return ConsumerBuilder.<V>builder().add(run)
-//			.add(userSeparatorNotEmpty, getProcessor(vo, USER_SET_GET_FIELD, USER_FIELD_SEPARATOR, UserCache::getUserByIds, User::getRealName))
-//			.add(deptSeparatorNotEmpty, getProcessor(vo, DEPT_SET_GET_FIELD, DEPT_FIELD_SEPARATOR, SysCache::getDeptByIds, Dept::getDeptName))
-//			.addAll(!userSeparatorNotEmpty, processMapFields(ExportUtil.getEntityMap(vo, USER_SET_GET_FIELD.values().toArray(new String[0]), User::getId, User::getRealName, UserCache::getUserByIds, "获取用户失败"), USER_SET_GET_FIELD))
-//			.addAll(!deptSeparatorNotEmpty, processMapFields(ExportUtil.getEntityMap(vo, DEPT_SET_GET_FIELD.values().toArray(new String[0]), Dept::getId, Dept::getDeptName, SysCache::getDeptByIds, "获取部门失败"), DEPT_SET_GET_FIELD))
+//			.add(getProcessor(userSeparatorEmpty, vo, USER_SET_GET_FIELD, USER_FIELD_SEPARATOR, UserCache::getUserByIds, User::getRealName))
+//			.add(getProcessor(deptSeparatorEmpty, vo, DEPT_SET_GET_FIELD, DEPT_FIELD_SEPARATOR, SysCache::getDeptByIds, Dept::getDeptName))
+//			.addAll(processMapFields(!userSeparatorEmpty, vo, USER_SET_GET_FIELD))
+//			.addAll(processMapFields(!deptSeparatorEmpty, vo, DEPT_SET_GET_FIELD))
 //			.build();
 //	}
 //
-//	private static <T> List<CollUtil.Consumer<T>> processMapFields(Map<Long, String> map, Map<String, String> fieldMap) {
-//		if (MapUtil.isEmpty(map) || MapUtil.isEmpty(fieldMap)) return Collections.emptyList();
-//		return fieldMap.entrySet().stream()
-//			.map(entry -> (CollUtil.Consumer<T>) (value, index) -> ReflectUtil.setFieldValue(value, entry.getKey(), map.getOrDefault(Convert.toLong(ReflectUtil.getFieldValue(value, entry.getValue())), Convert.toStr(ReflectUtil.getFieldValue(value, entry.getKey())))))
+//	private static <V> List<CollUtil.Consumer<V>> processMapFields(boolean separatorNotEmpty, List<V> vo, Map<String, String> setGetField) {
+//		if (separatorNotEmpty || MapUtil.isEmpty(setGetField)) return Collections.emptyList();
+//
+//		Map<Long, String> entityMap = ExportUtil.getEntityMap(vo, setGetField.values().toArray(new String[0]), User::getId, User::getRealName, UserCache::getUserByIds, "获取用户失败");
+//		if (MapUtil.isEmpty(entityMap)) return Collections.emptyList();
+//
+//		return setGetField.entrySet().stream()
+//			.map(entry -> (CollUtil.Consumer<V>) (value, index) -> ReflectUtil.setFieldValue(value, entry.getKey(), entityMap.getOrDefault(Convert.toLong(ReflectUtil.getFieldValue(value, entry.getValue())), Convert.toStr(ReflectUtil.getFieldValue(value, entry.getKey())))))
 //			.collect(Collectors.toList());
 //	}
 //
