@@ -1,4 +1,4 @@
-package indi.LoCalm.storage.plugins;
+package indi.LoCalm.plugins;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Console;
@@ -93,7 +93,7 @@ public class GenerateSQL {
 
 
     @Contract(pure = true)
-    private static @NotNull String addSingleQuotationMarks(Object str) {
+    public static @NotNull String addSingleQuotationMarks(Object str) {
         return "\'" + str + "\'";
     }
 
