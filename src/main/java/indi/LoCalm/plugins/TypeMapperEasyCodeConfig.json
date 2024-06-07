@@ -1,0 +1,102 @@
+{
+  "author" : "LoCalm",
+  "version" : "1.2.8",
+  "userSecure" : "",
+  "currTypeMapperGroupName" : "Default",
+  "currTemplateGroupName" : "cloud",
+  "currColumnConfigGroupName" : "Default",
+  "currGlobalConfigGroupName" : "Default",
+  "typeMapper" : {
+    "Default" : {
+      "name" : "Default",
+      "elementList" : [ {
+        "matchType" : "REGEX",
+        "columnType" : "varchar(\\(\\d+\\))?",
+        "javaType" : "java.lang.String"
+      }, {
+        "matchType" : "REGEX",
+        "columnType" : "char(\\(\\d+\\))?",
+        "javaType" : "java.lang.String"
+      }, {
+        "matchType" : "REGEX",
+        "columnType" : "(tiny|medium|long)*text",
+        "javaType" : "java.lang.String"
+      }, {
+        "matchType" : "REGEX",
+        "columnType" : "decimal(\\(\\d+,\\d+\\))?",
+        "javaType" : "java.lang.Double"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "integer",
+        "javaType" : "java.lang.Integer"
+      }, {
+        "matchType" : "REGEX",
+        "columnType" : "(tiny|small|medium)*int(\\(\\d+\\))?",
+        "javaType" : "java.lang.Integer"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "int4",
+        "javaType" : "java.lang.Integer"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "int8",
+        "javaType" : "java.lang.Long"
+      }, {
+        "matchType" : "REGEX",
+        "columnType" : "bigint(\\(\\d+\\))?",
+        "javaType" : "java.lang.Long"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "date",
+        "javaType" : "java.util.Date"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "datetime",
+        "javaType" : "java.util.Date"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "time",
+        "javaType" : "java.time.LocalTime"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "boolean",
+        "javaType" : "java.lang.Boolean"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "timestamp(\\(\\d+\\))?",
+        "javaType" : "java.time.LocalDateTime"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "TIMESTAMP(\\(\\d+\\))",
+        "javaType" : "java.time.LocalDateTime"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "timestamp with time zone",
+        "javaType" : "java.time.LocalDateTime"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "NUMBER(\\(\\d+\\))?",
+        "javaType" : "java.lang.Long"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "NUMBER\\(\\d+(,\\d+)+\\)",
+        "javaType" : "java.math.BigDecimal"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "TEXT(max)",
+        "javaType" : "java.lang.String"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "VARCHAR2(\\(\\d+\\))?",
+        "javaType" : "java.lang.String"
+      }, {
+        "matchType" : "ORDINARY",
+        "columnType" : "NVARCHAR2(\\(\\d+\\))?",
+        "javaType" : "java.lang.String"
+      } ]
+    }
+  },
+  "template" : { },
+  "columnConfig" : { },
+  "globalConfig" : { }
+}
