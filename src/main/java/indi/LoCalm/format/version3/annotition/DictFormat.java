@@ -1,4 +1,4 @@
-//package indi.LoCalm.format.version2.annotition;
+//package indi.LoCalm.format.version3.annotition;
 //
 //import org.springframework.core.annotation.AliasFor;
 //
@@ -16,15 +16,15 @@
 //@Retention(RetentionPolicy.RUNTIME)
 //public @interface DictFormat {
 //
-//    @AliasFor("fieldName")
-//    String value() default "";
+//	@AliasFor("fieldName")
+//	String value() default "";
 //
-//    @AliasFor("value")
-//    String fieldName() default "";
+//	@AliasFor("value")
+//	String fieldName() default "";
 //
-//    DictCode code();
+//	Code code();
 //
-//    enum DictCode {
-//    }
+//	enum Code {
+//	}
 //
 //}
