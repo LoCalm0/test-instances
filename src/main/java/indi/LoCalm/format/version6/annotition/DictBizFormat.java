@@ -1,4 +1,4 @@
-//package indi.LoCalm.format.version5.annotition;
+//package indi.LoCalm.format.version6.annotition;
 //
 //import org.springframework.core.annotation.AliasFor;
 //
@@ -8,13 +8,13 @@
 //import java.lang.annotation.Target;
 //
 ///**
-// * 字典格式化
+// * 业务字典格式化
 // *
 // * @author LoCalm
 // */
 //@Target(ElementType.FIELD)
 //@Retention(RetentionPolicy.RUNTIME)
-//public @interface DictFormat {
+//public @interface DictBizFormat {
 //
 //	@AliasFor("fieldName")
 //	String value() default "";
@@ -22,12 +22,15 @@
 //	@AliasFor("value")
 //	String fieldName() default "";
 //
-//	DictCode code();
+//	Code code() default Code.EMPTY;
+//
+//	String strCode() default "";
 //
 //	/**
-//	 * 字典 code
+//	 * 业务字典 code
 //	 */
-//	enum DictCode {
+//	enum Code {
+//		EMPTY,
 //	}
 //
 //}

@@ -1,4 +1,4 @@
-//package indi.LoCalm.format.version5.annotition;
+//package indi.LoCalm.format.version6.annotition;
 //
 //import org.springframework.core.annotation.AliasFor;
 //
@@ -22,12 +22,15 @@
 //	@AliasFor("value")
 //	String fieldName() default "";
 //
-//	DictCode code();
+//	Code code() default Code.EMPTY;
+//
+//	String strCode() default "";
 //
 //	/**
 //	 * 字典 code
 //	 */
-//	enum DictCode {
+//	enum Code {
+//		EMPTY,
 //	}
 //
 //}

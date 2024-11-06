@@ -22,13 +22,13 @@
 //	@AliasFor("value")
 //	String fieldName() default "";
 //
-//	Code code();
+//	DictCode code();
 //
 //
 //	/**
 //	 * 业务字典 code
 //	 */
-//	enum Code {
+//	enum DictCode {
 //	}
 //
 //}
