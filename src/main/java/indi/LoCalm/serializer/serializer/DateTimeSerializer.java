@@ -10,7 +10,6 @@
 //import com.fasterxml.jackson.core.JsonGenerator;
 //import com.fasterxml.jackson.core.JsonStreamContext;
 //import com.fasterxml.jackson.databind.BeanProperty;
-//import com.fasterxml.jackson.databind.JsonMappingException;
 //import com.fasterxml.jackson.databind.JsonSerializer;
 //import com.fasterxml.jackson.databind.SerializerProvider;
 //import com.fasterxml.jackson.databind.ser.ContextualSerializer;
@@ -50,9 +49,8 @@
 //		}
 //	}
 //
-//
 //	@Override
-//	public JsonSerializer<Object> createContextual(SerializerProvider prov, BeanProperty property) throws JsonMappingException {
+//	public JsonSerializer<Object> createContextual(SerializerProvider prov, BeanProperty property) {
 //		this.init(property.getMember().getDeclaringClass(), property.getName(), true);
 //		return this;
 //	}

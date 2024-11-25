@@ -357,7 +357,7 @@
 //		return data.stream().collect(Collectors.groupingBy(code, Collectors.toMap(key, value)));
 //	}
 //
-//	private static List<Long> getSeparatorData(@NotNull String fieldValueStr, String separator) {
+//	public static List<Long> getSeparatorData(@NotNull String fieldValueStr, String separator) {
 //		if (ReUtil.isMatch(CharSequenceUtil.format("[0-9{}]+", separator), fieldValueStr)) {
 //			final SplitIter splitIter = new SplitIter(fieldValueStr, new StrFinder(separator, false), -1, true);
 //			return splitIter.toList(Convert::toLong);

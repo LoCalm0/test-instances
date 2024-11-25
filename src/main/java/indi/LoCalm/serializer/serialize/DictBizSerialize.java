@@ -2,6 +2,7 @@
 //
 //import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 //import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+//import com.imtristone.format.annotition.DictBizFormat;
 //import com.imtristone.format.util.serializer.DictBizSerializer;
 //
 //import java.lang.annotation.ElementType;
@@ -20,7 +21,9 @@
 //@JsonSerialize(using = DictBizSerializer.class, nullsUsing = DictBizSerializer.class)
 //public @interface DictBizSerialize {
 //
-//	String code();
+//	DictBizFormat.Code code() default DictBizFormat.Code.EMPTY;
+//
+//	String strCode() default "";
 //
 //	String prefix() default DictBizSerializer.PREFIX;
 //

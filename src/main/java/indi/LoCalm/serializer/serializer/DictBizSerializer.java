@@ -11,6 +11,7 @@
 //import com.fasterxml.jackson.databind.JsonSerializer;
 //import com.fasterxml.jackson.databind.SerializerProvider;
 //import com.fasterxml.jackson.databind.ser.ContextualSerializer;
+//import com.imtristone.format.annotition.DictBizFormat;
 //import com.imtristone.format.annotition.serialize.DictBizSerialize;
 //import com.imtristone.system.cache.DictBizCache;
 //import com.imtristone.system.entity.DictBiz;
@@ -57,9 +58,8 @@
 //	@SneakyThrows
 //	private void init(Class<?> clazz, String fieldName, boolean flag) {
 //		DictBizSerialize dictBizSerialize = AnnotationUtil.getAnnotation(ReflectUtil.getField(clazz, fieldName), DictBizSerialize.class);
-//		if (CharSequenceUtil.isBlank(CharSequenceUtil.trim(dictBizSerialize.code()))) {
-//			throw new NullPointerException("code不能为空");
-//		}
+//
+//		String code = Opt.ofBlankAble(dictBizSerialize.code() == DictBizFormat.Code.EMPTY ? CharSequenceUtil.trim(dictBizSerialize.strCode()).toLowerCase() : dictBizSerialize.code().name().toLowerCase()).orElseThrow(NullPointerException::new, "code和strCode为空");
 //
 //		this.jsonFieldName = Opt.ofBlankAble(CharSequenceUtil.trim(dictBizSerialize.jsonFieldName())).orElse(Opt.ofBlankAble(CharSequenceUtil.trim(dictBizSerialize.prefix())).orElse(PREFIX) + fieldName + Opt.ofBlankAble(CharSequenceUtil.trim(dictBizSerialize.suffix())).orElse(SUFFIX));
 //
@@ -68,7 +68,7 @@
 //		}
 //
 //		if (flag) {
-//			this.dictBiz = Opt.ofEmptyAble(DictBizCache.getList(CharSequenceUtil.trim(dictBizSerialize.code()))).map(list -> list.stream().collect(Collectors.toMap(DictBiz::getDictKey, DictBiz::getDictValue))).orElse(Collections.emptyMap());
+//			this.dictBiz = Opt.ofEmptyAble(DictBizCache.getList(code)).map(list -> list.stream().collect(Collectors.toMap(DictBiz::getDictKey, DictBiz::getDictValue))).orElse(Collections.emptyMap());
 //		}
 //	}
 //
